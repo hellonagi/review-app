@@ -1,0 +1,73 @@
+@startuml reviwe-app
+ skinparam linetype ortho
+ hide circle
+
+entity users {
+  * id : bigint <<PK>>
+  --
+    email           : varchar(255) <<U>>
+    discord_id      : varchar(255) <<U>>
+    twitter_id      : varchar(255) <<U>>
+  * password_digest  : varchar(255)
+  * display_name     : varchar(32)
+  * admin           : boolean
+  * created_at      : datetime
+  * updated_at      : datetime
+}
+
+entity devices {
+  * id : bigint <<PK>>
+  --
+  * name            : varchar(100)
+  * description     : text
+    price           : mediumint
+    amazon_link     : varchar(255)
+  * category_id     : bigint <<FK>>
+  * created_at      : datetime
+  * updated_at      : datetime
+}
+
+entity categories {
+  * id : bigint <<PK>>
+  --
+  * name      : varchar(100) <<U>>
+  * created_at      : datetime
+  * updated_at      : datetime
+}
+
+
+entity reviews {
+  * id : bigint <<PK>>
+  --
+  * description     : text
+  * rating          : tinyint
+  * user_id         : bigint <<FK>>
+  * device_id       : bigint <<FK>>
+  * created_at      : datetime
+  * updated_at      : datetime
+}
+
+entity tags {
+  * id : bigint <<PK>>
+  --
+  * name     : varchar(32)
+  * created_at      : datetime
+  * updated_at      : datetime
+}
+
+entity devices_tags {
+  * id : bigint <<PK>>
+  --
+  * device_id       : bigint <<FK>>
+  * tag_id          : bigint <<FK>>
+  * created_at      : datetime
+  * updated_at      : datetime
+}
+
+users ||--o{ reviews
+devices ||--o{ reviews
+devices }o--|| categories
+devices ||--|{ devices_tags
+tags ||--|{ devices_tags
+
+@enduml
